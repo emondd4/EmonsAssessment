@@ -50,7 +50,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/MyAccountImageView">
 
                 <EditText
-                    android:id="@+id/signInEmailText"
+                    android:id="@+id/signInUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/user_name"

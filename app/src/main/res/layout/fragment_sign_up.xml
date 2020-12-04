@@ -84,7 +84,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/awesomeTextInputLayout4">
 
                 <EditText
-                    android:id="@+id/signUpEmailText"
+                    android:id="@+id/signUpUserNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/user_name"
@@ -134,7 +134,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/awesomeTextInputLayout2">
 
                 <EditText
-                    android:id="@+id/signUpConfPass"
+                    android:id="@+id/signUpPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/phone"

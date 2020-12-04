@@ -14,11 +14,17 @@ public class User implements Serializable {
     private String Name;
     private String UserName;
     private String Password;
+    private String Phone;
 
-    public User(String name, String userName, String password) {
+    public User(String name, String userName, String password, String phone) {
         Name = name;
         UserName = userName;
         Password = password;
+        Phone = phone;
+    }
+
+    public User() {
+
     }
 
     @NonNull
@@ -52,6 +58,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         Password = password;
+    }
+
+    public String getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(String phone) {
+        Phone = phone;
     }
 
     @Override
