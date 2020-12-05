@@ -2,6 +2,7 @@ package com.emon.emonsassessment.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,12 +25,20 @@ import com.emon.emonsassessment.RoomData.UserDAO;
 import com.emon.emonsassessment.RoomData.UserDataBase;
 import com.emon.emonsassessment.RoomModel.User;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class SignInFragment extends Fragment implements FragmentChangeListener {
 
     private TextView SignUp;
     private EditText UserName,Password;
     private Button Signin;
     private ProgressDialog progressDialog;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+    public static final String SHARED_PREF_NAME = "mypref";
+
 
     UserDAO dataBase;
     UserDataBase userDataBase;
@@ -45,6 +54,10 @@ public class SignInFragment extends Fragment implements FragmentChangeListener {
     }
 
     private void init(View view) {
+
+        sharedPreferences = getContext().getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
 
         SignUp = view.findViewById(R.id.signUpTextView);
         UserName = view.findViewById(R.id.signInUserName);
@@ -68,7 +81,13 @@ public class SignInFragment extends Fragment implements FragmentChangeListener {
 
                 User user = dataBase.getUser(userName,password);
                 if (user != null){
-                    startActivity(new Intent(getContext(),MainActivity.class));
+
+                    Intent i = new Intent(getContext(),MainActivity.class);
+                    i.putExtra("userInfo",user);
+                    editor.putString("KEY_USERNAME", user.getUserName());
+                    editor.apply();
+                    startActivity(i);
+
                 }else {
                     Toast.makeText(getContext(), "User Not Found!", Toast.LENGTH_SHORT).show();
                 }

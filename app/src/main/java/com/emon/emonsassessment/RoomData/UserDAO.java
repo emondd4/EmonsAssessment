@@ -14,6 +14,9 @@ public interface UserDAO {
     @Query("SELECT * FROM User WHERE UserName = :UserName and  Password = :Password")
     User getUser (String UserName, String Password);
 
+    @Query("SELECT * FROM User WHERE UserName = :UserName")
+    User getUserInfo (String UserName);
+
     @Insert
     void insert(User user);
 

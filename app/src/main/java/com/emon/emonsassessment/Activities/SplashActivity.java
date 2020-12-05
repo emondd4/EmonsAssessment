@@ -9,13 +9,14 @@ import android.os.Looper;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.emon.emonsassessment.R;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private TextView title;
+    private ImageView Logo;
 
     Animation middleAnimation;
 
@@ -29,10 +30,10 @@ public class SplashActivity extends AppCompatActivity {
         middleAnimation = AnimationUtils.loadAnimation(this,R.anim.middle_animation);
 
         //view initialize
-        title = findViewById(R.id.title_text);
+        Logo = findViewById(R.id.logo);
 
         //setting animations
-        title.setAnimation(middleAnimation);
+        Logo.setAnimation(middleAnimation);
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
