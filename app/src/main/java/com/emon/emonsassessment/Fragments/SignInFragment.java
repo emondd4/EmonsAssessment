@@ -87,7 +87,6 @@ public class SignInFragment extends Fragment implements FragmentChangeListener {
                     editor.putString("KEY_USERNAME", user.getUserName());
                     editor.apply();
                     startActivity(i);
-
                 }else {
                     Toast.makeText(getContext(), "User Not Found!", Toast.LENGTH_SHORT).show();
                 }

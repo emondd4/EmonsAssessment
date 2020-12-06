@@ -63,6 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/name"
+                    android:textColor="@color/purple_500"
                     android:inputType="text"
                     android:textSize="15sp" />
 
@@ -89,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/user_name"
                     android:inputType="text"
+                    android:textColor="@color/purple_500"
                     android:textSize="15sp" />
 
             </ss.anoop.awesometextinputlayout.AwesomeTextInputLayout>
@@ -114,6 +116,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
                     android:inputType="textPassword"
+                    android:textColor="@color/purple_500"
                     android:textSize="15sp" />
 
             </ss.anoop.awesometextinputlayout.AwesomeTextInputLayout>
@@ -139,6 +142,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/phone"
                     android:inputType="phone"
+                    android:textColor="@color/purple_500"
                     android:textSize="15sp" />
 
             </ss.anoop.awesometextinputlayout.AwesomeTextInputLayout>

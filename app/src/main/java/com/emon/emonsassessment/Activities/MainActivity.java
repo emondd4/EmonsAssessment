@@ -1,10 +1,9 @@
 package com.emon.emonsassessment.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,23 +17,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.emon.emonsassessment.ApiModel;
+import com.emon.emonsassessment.ApiAdapter;
 import com.emon.emonsassessment.R;
+import com.emon.emonsassessment.Post;
 import com.emon.emonsassessment.RoomModel.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView username;
     private Button Search, Profile;
     private RecyclerView recyclerView;
+    private ApiAdapter apiAdapter;
     private User my_info;
 
     private SharedPreferences sharedPreferences;
@@ -72,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         Search = findViewById(R.id.SearchButton);
         Profile = findViewById(R.id.ProfileButton);
         recyclerView = findViewById(R.id.RecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         username.setText(sharedPreferences.getString("KEY_USERNAME", null));
 
@@ -94,20 +92,28 @@ public class MainActivity extends AppCompatActivity {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
+
                                 Log.i("PostActivity", response);
-                                List<ApiModel> posts = Arrays.asList(gson.fromJson(response, ApiModel[].class));
+
+                                List<Post> posts = Arrays.asList(gson.fromJson(response, Post[].class));
+
+                                ArrayList<Post> list = new ArrayList<>(posts);
+
+                                apiAdapter = new ApiAdapter(list,MainActivity.this);
+                                recyclerView.setAdapter(apiAdapter);
+                                apiAdapter.notifyDataSetChanged();
 
                                 Log.i("PostActivity", posts.size() + " posts loaded.");
-                                for (ApiModel apiModel : posts) {
-                                    Log.i("PostActivity", apiModel.getId() + ": " + apiModel.getUrl());
+                                for (Post apiModel : posts) {
+                                    Log.i("PostActivity", apiModel.getScore() + ": " + apiModel.getShow().getId());
                                 }
+
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.e("PostActivity", error.toString());
-                                //Toast.makeText(MainActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.e("PostActivityError", error.toString());
                             }
                         });
 
@@ -125,5 +131,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
