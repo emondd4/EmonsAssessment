@@ -16,25 +16,26 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.emon.emonsassessment.ApiModel;
 import com.emon.emonsassessment.R;
 import com.emon.emonsassessment.RoomModel.User;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     public static final String SHARED_PREF_NAME = "mypref";
+    private RequestQueue requestQueue;
+    private Gson gson;
+    private String extra,url;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,37 +84,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String extra = SearchEditText.getText().toString();
-                String url = "https://api.tvmaze.com/search/shows?q=" + extra;
+                extra = SearchEditText.getText().toString();
+                url = "https://api.tvmaze.com/search/shows?q=" + extra;
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.setDateFormat("M/d/yy hh:mm a");
+                gson = gsonBuilder.create();
 
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Log.i("PostActivity", response);
+                                List<ApiModel> posts = Arrays.asList(gson.fromJson(response, ApiModel[].class));
 
-                getJSON(url);
+                                Log.i("PostActivity", posts.size() + " posts loaded.");
+                                for (ApiModel apiModel : posts) {
+                                    Log.i("PostActivity", apiModel.getId() + ": " + apiModel.getUrl());
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("PostActivity", error.toString());
+                                //Toast.makeText(MainActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-//                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                        new Response.Listener<String>() {
-//                            @Override
-//                            public void onResponse(String response) {
-//
-//                                Log.e( "onResponse:", response);
-//
-//                                try {
-//                                    JSONObject jsonObject = new JSONObject(response);
-//
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        },
-//                        new Response.ErrorListener() {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//                                Log.e("onErrorResponse: ", error.getMessage());
-//                                //Toast.makeText(MainActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//
-//                RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-//                requestQueue.add(stringRequest);
+                RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+                requestQueue.add(stringRequest);
             }
         });
 
@@ -121,12 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-    }
-
-    private void getJSON(String url) {
-
-
 
     }
 }
